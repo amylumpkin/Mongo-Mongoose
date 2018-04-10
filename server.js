@@ -18,10 +18,14 @@ const app = express();
 
 //middleware
 app.use(logger("dev")); //logs results
-app.use(bodyParser.urlencoded({ extended: true})); //handles form submissions
+app.use(bodyParser.urlencoded({ extended: true })); //handles form submissions
 app.use(express.static("public")); //makes the public folder the static directory
 
 //connect to mongodb
-mongoose.connect("mongodb://localhost/Mongo-Mongoose");
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+mongoose.Promis = Promise;
+mongoose.connect(MONGODB_URI, {
+    useMongoClient: true
+});
 
-//routes
+//handlebars
