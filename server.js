@@ -24,8 +24,11 @@ app.use(express.static("public")); //makes the public folder the static director
 //connect to mongodb
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
 mongoose.Promis = Promise;
-mongoose.connect(MONGODB_URI, {
-    useMongoClient: true
-});
+mongoose.connect(MONGODB_URI);
 
 //handlebars
+
+
+
+//start server
+app.listen(PORT, () => console.log(`App is listening on port ${PORT}`));
