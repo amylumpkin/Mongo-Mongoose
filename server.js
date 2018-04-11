@@ -28,6 +28,10 @@ mongoose.connect(MONGODB_URI);
 
 //handlebars
 
+//routes
+
+
+
 
 
 //start server
