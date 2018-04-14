@@ -5,11 +5,14 @@ const Schema = mongoose.Schema;
 const ArticleSchema = new Schema({
     title: {
         type: String,
-        required: true
+        required: false
     },
     link: {
         type: String,
-        required: true
+        required: false
+    },
+    image: {
+        type: String
     },
     note: {
         type: Schema.Types.ObjectId,
