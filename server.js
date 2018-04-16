@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({ extended: true })); //handles form submissions
 app.use(express.static("public")); //makes the public folder the static directory
 
 //connect to mongodb
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/Mongo-Mongoose";
 mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI);
 
@@ -35,25 +35,27 @@ app.get("/scrape", function(req, res) {
     axios.get("http://www.newsandguts.com").then(function(response) { //grabs html body
         const $ = cheerio.load(response.data);  //load into cheerio in a usable format.
         $("div.postTile-wrap").each(function(i, element) {
-            console.log("cheerio is finding this div");
+            console.log("cheerio is finding main div");
             const result = {};
 
-            //specific html tags within the body above
+            //specific html tags within the div above
             result.title = $(this)
             .children("div.postTile-col--2")
-            .children("div.postTile-meta")
-            .text();
-            console.log("grabbed" + result.title);
+            .children("div.postTile-meta a")
+            .html().trim();
+            console.log("scraped title: " + result.title);
+
             result.link = $(this)
             .children("h1.postTile-title")
             .text();
-            console.log("grabbed" + result.link);
+            console.log("scraped link: " + result.link);
+
             result.image = $(this)
             .children("div.postTile-col--1")
             .children("picture")
             .children("img")
             .attr("src");
-            console.log("grabbed" + result.image);
+            console.log("scraped image: " + result.image);
 
             //create new article using above result object
             db.Article.create(result)
@@ -74,7 +76,10 @@ app.get("/scrape", function(req, res) {
 //route for getting all articles from db
 app.get("/articles", function(req, res) {
     db.Article.find({})
-    .then(function(err) {
+    .then(function(dbArticle) {
+        res.json(dbArticle);
+    })
+    .catch(function(err) {
         res.json(err);
     });
 });
