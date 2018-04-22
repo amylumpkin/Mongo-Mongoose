@@ -41,8 +41,9 @@ app.get("/scrape", function(req, res) {
             //specific html tags within the div above
             result.title = $(this)
             .children("div.postTile-col--2")
-            .children("div.postTile-meta a")
-            .html().trim();
+            .children("div.postTile-meta")
+            .children("h1.postTile-title a")
+            .html();
             console.log("scraped title: " + result.title);
 
             result.link = $(this)
